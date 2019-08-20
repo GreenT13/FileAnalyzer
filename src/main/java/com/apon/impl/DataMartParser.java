@@ -8,13 +8,13 @@ import com.apon.impl.processors.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.reflections.Reflections;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * The DataMartParser fills a {@link DataMartContext} with data created by processors.
@@ -22,15 +22,21 @@ import java.util.List;
  */
 public class DataMartParser {
 
-    // If the list grows too large, we can create it with reflection.
-    private static List<Class<? extends IProcessor<CSVRecord, DataMartContext>>> processorClasses = Arrays.asList(
-            StartEndProcessor.class,
-            RecordsWrittenProcessor.class,
-            RecordsImportedProcessor.class,
-            LoggedSpeedProcessor.class,
-            JobTimeProcessor.class,
-            RealPolicyTimingProcessor.class
-    );
+    private static List<Class<? extends IProcessor<CSVRecord, DataMartContext>>> processorClasses;
+
+    static {
+        Reflections reflections = new Reflections("com.apon.impl.processors");
+        List<Class<? extends AbstractDataMartProcessor>> processors = new ArrayList<>(reflections.getSubTypesOf(AbstractDataMartProcessor.class));
+        processorClasses = new ArrayList<>();
+        for (Class<?> processorClass : processors) {
+            @SuppressWarnings("unchecked")
+            Class<? extends IProcessor<CSVRecord, DataMartContext>> realProcessorClass = (Class<? extends IProcessor<CSVRecord, DataMartContext>>) processorClass;
+            if (Modifier.isAbstract(realProcessorClass.getModifiers())) {
+                continue;
+            }
+            processorClasses.add(realProcessorClass);
+        }
+    }
 
     private final IProcessor<CSVRecord, DataMartContext> chain;
 

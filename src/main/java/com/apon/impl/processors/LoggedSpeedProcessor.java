@@ -13,7 +13,7 @@ public class LoggedSpeedProcessor extends AbstractDataMartProcessor {
 
     @Override
     public void processObject(CSVRecord object, DataMartContext context) {
-        if (CSVMetaData.HeaderType.MESSAGE.isType(object) &&
+        if (CSVMetaData.HeaderType.RECORDS_PER_MINUTE.isType(object) &&
                 object.get(CSVMetaData.HEADER_MESSAGE).matches(SPEED)) {
 
             String speed = MyUtil.getMatchedGroupFromMessage(object, SPEED_PATTERN);

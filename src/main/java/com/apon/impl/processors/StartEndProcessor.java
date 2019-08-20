@@ -8,6 +8,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.util.regex.Pattern;
 
+@DataMartProcessor(order = 0)
 public class StartEndProcessor extends AbstractDataMartProcessor {
 
     private final static String REGEX_START_TASK = "The task '(.*)' started\\.";
