@@ -49,16 +49,32 @@ public class DataMartContext implements Context {
         return tasks;
     }
 
+    public String getJobStart() {
+        return jobStart;
+    }
+
     public void setJobStart(String jobStart) {
         this.jobStart = jobStart;
+    }
+
+    public String getJobEnd() {
+        return jobEnd;
     }
 
     public void setJobEnd(String jobEnd) {
         this.jobEnd = jobEnd;
     }
 
+    public String getRealPolicyStart() {
+        return realPolicyStart;
+    }
+
     public void setRealPolicyStart(String realPolicyStart) {
         this.realPolicyStart = realPolicyStart;
+    }
+
+    public String getRealPolicyEnd() {
+        return realPolicyEnd;
     }
 
     public void setRealPolicyEnd(String realPolicyEnd) {
